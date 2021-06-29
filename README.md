@@ -69,7 +69,7 @@ public class Save
         //cacheに追加
         manager.Add(itemDto);
         //cacheを外部に保存
-        IEnumrator<float> write = manager.WriteData();
+        IEnumrator<float> write = manager.WriteAllRegistoryData();
         while(write.MoveNext()){}
     }
 }
@@ -85,7 +85,7 @@ public class Load
         //ItemDto、ItemDaoをCacheの管理下に登録
         manager.Regist();
         //外部に保存されたデータを読み込み
-        IEnumrator<float> load = manager.LoadData();
+        IEnumrator<float> load = manager.ReadAllRegistoryData();
         while(load.MoveNext()){}
     }
 }
