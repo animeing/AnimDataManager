@@ -23,13 +23,13 @@ namespace AnimDataManager.AutoLoader
 
         private ConcurrentDictionary<Type, DataCacheWrapper<T1, T2>> cacheData = new ConcurrentDictionary<Type, DataCacheWrapper<T1, T2>>();
 
-        public void Regist()
+        public bool Regist()
         {
             if(IsRegisted)
             {
-                return;
+                return false;
             }
-            cacheData.TryAdd(typeof(T1), new DataCacheWrapper<T1, T2>());
+            return cacheData.TryAdd(typeof(T1), new DataCacheWrapper<T1, T2>());
         }
 
         public bool Erase()
@@ -69,6 +69,7 @@ namespace AnimDataManager.AutoLoader
             foreach (DataCacheWrapper<T1, T2> dataCacheWrapper in Instance.cacheData.Values)
             {
                 dataCacheWrapper.Load();
+                currentLoadCount++;
                 yield return currentLoadCount / allCount;
             }
         }
@@ -89,6 +90,7 @@ namespace AnimDataManager.AutoLoader
             foreach (DataCacheWrapper<T1, T2> dataCacheWrapper in Instance.cacheData.Values)
             {
                 dataCacheWrapper.Write();
+                currentWiteCount++;
                 yield return currentWiteCount / allCount;
             }
         }

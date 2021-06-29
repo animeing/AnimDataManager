@@ -171,7 +171,7 @@ namespace AnimDataManager.DataBase
                 {
                     continue;
                 }
-                if (fieldInfo.GetValue(this) != fieldInfo.GetValue(dto))
+                if (!fieldInfo.GetValue(this).Equals(fieldInfo.GetValue(dto)))
                 {
                     return false;
                 }
