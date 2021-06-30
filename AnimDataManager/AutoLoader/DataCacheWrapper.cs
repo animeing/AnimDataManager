@@ -80,19 +80,9 @@ namespace AnimDataManager.AutoLoader
             }
         }
 
-        protected override bool Add<T>(T data)
-        {
-            return Add(data);
-        }
-
         public bool Remove(T2 data)
         {
             return Cache.TryRemove(CreateKey(data), out data);
-        }
-
-        protected override bool Remove<T>(T data)
-        {
-            return Remove(data);
         }
 
         public override void Clear()
