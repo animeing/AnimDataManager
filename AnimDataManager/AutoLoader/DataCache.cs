@@ -12,6 +12,7 @@ namespace AnimDataManager.AutoLoader
     {
         private DataCache() {}
         public static DataCache<T1, T2> Instance { get; } = new DataCache<T1, T2>();
+        private ConcurrentDictionary<Type, DataCacheWrapper<T1, T2>> cacheData = new ConcurrentDictionary<Type, DataCacheWrapper<T1, T2>>();
 
         public bool IsRegisted
         {
@@ -20,8 +21,6 @@ namespace AnimDataManager.AutoLoader
                 return cacheData.ContainsKey(typeof(T1));
             }
         }
-
-        private ConcurrentDictionary<Type, DataCacheWrapper<T1, T2>> cacheData = new ConcurrentDictionary<Type, DataCacheWrapper<T1, T2>>();
 
         public bool Regist()
         {
@@ -50,6 +49,11 @@ namespace AnimDataManager.AutoLoader
         public bool Remove(T2 data)
         {
             return cacheData[typeof(T1)].Remove(data);
+        }
+
+        public void Clear()
+        {
+            cacheData[typeof(T1)].Clear();
         }
 
         public ICollection<T2> GetCacheData()

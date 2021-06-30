@@ -79,6 +79,11 @@ namespace AnimDataManager.AutoLoader
             return Cache.TryRemove(CreateKey(data), out data);
         }
 
+        public void Clear()
+        {
+            Cache.Clear();
+        }
+
         internal void Load()
         {
             ConcurrentDictionary<string, T2> newDto = ToDictionaryDtos(dao.FindAll());
