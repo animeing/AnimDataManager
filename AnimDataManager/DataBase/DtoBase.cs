@@ -6,7 +6,7 @@ using System.Runtime.Serialization;
 namespace AnimDataManager.DataBase
 {
     [Serializable]
-    public abstract class DtoBase<T> : ISerializable
+    public abstract class DtoBase<T> : ISerializable, IDtoBase
         where T : DtoBase<T>, new()
     {
         public string tableName

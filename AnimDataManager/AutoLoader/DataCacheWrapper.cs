@@ -6,8 +6,8 @@ using System.Reflection;
 
 namespace AnimDataManager.AutoLoader
 {
-    internal class DataCacheWrapper<T1, T2>
-        where T2 : DtoBase<T2>, new()
+    public sealed class DataCacheWrapper<T1, T2> : CacheWrapperBase
+        where T2 : DtoBase<T2>, IDtoBase, new()
         where T1 : DaoBase<T2>, IDao<T2>, new()
     {
 
@@ -51,12 +51,18 @@ namespace AnimDataManager.AutoLoader
             return dictionary;
         }
 
-        internal string CreateKey(T2 data)
+        public string CreateKey(T2 data)
+        {
+            return CreateKey<T2>(data);
+        }
+
+
+        protected override string CreateKey<T>(T data)
         {
             var keys = "";
             foreach (PropertyInfo unique in uniques)
             {
-                keys += "|"+(unique.GetValue(data).ToString().Replace("|", "\\|"));
+                keys += "|" + (unique.GetValue(data).ToString().Replace("|", "\\|"));
             }
             return keys;
         }
@@ -74,23 +80,33 @@ namespace AnimDataManager.AutoLoader
             }
         }
 
+        protected override bool Add<T>(T data)
+        {
+            return Add(data);
+        }
+
         public bool Remove(T2 data)
         {
             return Cache.TryRemove(CreateKey(data), out data);
         }
 
-        public void Clear()
+        protected override bool Remove<T>(T data)
+        {
+            return Remove(data);
+        }
+
+        public override void Clear()
         {
             Cache.Clear();
         }
 
-        internal void Load()
+        public override void Load()
         {
             ConcurrentDictionary<string, T2> newDto = ToDictionaryDtos(dao.FindAll());
             Cache = newDto;
         }
 
-        internal void Write()
+        public override void Write()
         {
             if (uniques.Count == 0)
             {
@@ -134,5 +150,6 @@ namespace AnimDataManager.AutoLoader
                 dao.Insert(inserts.ToArray());
             }
         }
+
     }
 }
