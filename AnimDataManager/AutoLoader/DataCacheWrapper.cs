@@ -51,7 +51,7 @@ namespace AnimDataManager.AutoLoader
             return dictionary;
         }
 
-        private string CreateKey(T2 data)
+        internal string CreateKey(T2 data)
         {
             var keys = "";
             foreach (PropertyInfo unique in uniques)

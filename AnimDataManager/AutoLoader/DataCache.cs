@@ -73,6 +73,21 @@ namespace AnimDataManager.AutoLoader
             return cacheData[typeof(T1)].Cache.Values;
         }
 
+        public bool GetCacheData(ref T2 data)
+        {
+            if (!IsRegisted)
+            {
+                return false;
+            }
+            DataCacheWrapper<T1, T2> cacheWrapper = cacheData[typeof(T1)];
+            string key = cacheWrapper.CreateKey(data);
+            if (!cacheWrapper.Cache.ContainsKey(key)){
+                return false;
+            }
+            data = cacheWrapper.Cache[key];
+            return true;
+        }
+
         public IEnumerator<float> ReadAllRegistoryData()
         {
             var allCount = Instance.cacheData.Count;
