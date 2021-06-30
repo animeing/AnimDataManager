@@ -43,16 +43,28 @@ namespace AnimDataManager.AutoLoader
 
         public bool Add(T2 data)
         {
+            if (!IsRegisted)
+            {
+                return false;
+            }
             return cacheData[typeof(T1)].Add(data);
         }
 
         public bool Remove(T2 data)
         {
+            if (!IsRegisted)
+            {
+                return false;
+            }
             return cacheData[typeof(T1)].Remove(data);
         }
 
         public void Clear()
         {
+            if (!IsRegisted)
+            {
+                return;
+            }
             cacheData[typeof(T1)].Clear();
         }
 
