@@ -81,7 +81,8 @@ namespace AnimDataManager.AutoLoader
             }
             DataCacheWrapper<T1, T2> cacheWrapper = cacheData[typeof(T1)];
             string key = cacheWrapper.CreateKey(data);
-            if (!cacheWrapper.Cache.ContainsKey(key)){
+            if (!cacheWrapper.Cache.ContainsKey(key))
+            {
                 return false;
             }
             data = cacheWrapper.Cache[key];
