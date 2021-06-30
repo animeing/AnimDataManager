@@ -56,6 +56,14 @@ namespace AnimDataManager.AutoLoader
             cacheData[typeof(T1)].Clear();
         }
 
+        public void ClearAll()
+        {
+            foreach(DataCacheWrapper<T1, T2> dataCacheWrapper in Instance.cacheData.Values)
+            {
+                dataCacheWrapper.Clear();
+            }
+        }
+
         public ICollection<T2> GetCacheData()
         {
             if(!IsRegisted)
