@@ -134,6 +134,10 @@ namespace AnimDataManager.AutoLoader
                         remove.Remove(currentStore[keys]);
                         continue;
                     }
+                    else
+                    {
+                        remove.Remove(currentStore[keys]);
+                    }
                 }
                 dao.Delete(remove.ToArray());
                 dao.Update(update.ToArray());
