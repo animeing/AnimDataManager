@@ -28,22 +28,37 @@ namespace AnimDataManager.AutoLoader
         where T1 : DaoBase<T2>, new()
         where T2 : DtoBase<T2>, new()
         {
-            return cacheData.TryAdd(typeof(T1), new DataCache<T1, T2>());
+            Type daoKey = typeof(T1);
+            if (IsRegisted(daoKey))
+            {
+                return false;
+            }
+            return cacheData.TryAdd(daoKey, new DataCache<T1, T2>());
         }
 
         public bool Erase<T1, T2>()
         where T1 : DaoBase<T2>, new()
         where T2 : DtoBase<T2>, new()
         {
+            Type daoKey = typeof(T1);
+            if (!IsRegisted(daoKey))
+            {
+                return false;
+            }
             CacheBase cacheWrapperBase = new DataCache<T1, T2>();
-            return cacheData.TryRemove(typeof(T1), out cacheWrapperBase);
+            return cacheData.TryRemove(daoKey, out cacheWrapperBase);
         }
 
         public DataCache<T1, T2> GetDataCacheWrapper<T1, T2>()
         where T1 : DaoBase<T2>, new()
         where T2 : DtoBase<T2>, new()
         {
-            return (DataCache<T1, T2>)cacheData[typeof(T1)];
+            Type daoKey = typeof(T1);
+            if (!IsRegisted(daoKey))
+            {
+                return null;
+            }
+            return (DataCache<T1, T2>)cacheData[daoKey];
         }
 
         public void ClearAll()
