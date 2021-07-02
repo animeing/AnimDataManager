@@ -1,5 +1,6 @@
 ﻿using AnimDataManager.Annotaition;
 using AnimDataManager.DataBase;
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Reflection;
@@ -11,11 +12,7 @@ namespace AnimDataManager.AutoLoader
         where T1 : DaoBase<T2>, IDao<T2>, new()
     {
 
-        public ConcurrentDictionary<string, T2> Cache
-        {
-            get;
-            private set;
-        } = new ConcurrentDictionary<string, T2>();
+        internal ConcurrentDictionary<string, T2> cache  = new ConcurrentDictionary<string, T2>();
         private T1 dao = new T1();
         private List<PropertyInfo> uniques = new List<PropertyInfo>();
         private List<PropertyInfo> others = new List<PropertyInfo>();
@@ -70,38 +67,47 @@ namespace AnimDataManager.AutoLoader
         public bool Add(T2 data)
         {
             string keys = CreateKey(data);
-            if (Cache.ContainsKey(keys))
+            if (cache.ContainsKey(keys))
             {
-                return Cache.TryUpdate(keys, data, Cache[keys]);
+                return cache.TryUpdate(keys, data, cache[keys]);
             }
             else
             {
-                return Cache.TryAdd(keys, data);
+                return cache.TryAdd(keys, data);
             }
         }
 
         public bool Remove(T2 data)
         {
-            return Cache.TryRemove(CreateKey(data), out data);
+            return cache.TryRemove(CreateKey(data), out data);
         }
 
         public override void Clear()
         {
-            Cache.Clear();
+            cache.Clear();
         }
 
         public override void Load()
         {
             ConcurrentDictionary<string, T2> newDto = ToDictionaryDtos(dao.FindAll());
-            Cache = newDto;
+            cache = newDto;
         }
 
-        public override void Write()
+        private bool DaoAction(Func<T2[], bool> action, T2[] data)
+        {
+            if(data.Length == 0)
+            {
+                return true;
+            }
+            return action(data);
+        }
+
+        public override bool Write()
         {
             if (uniques.Count == 0)
             {
                 List<T2> currentStore = dao.FindAll();
-                List<T2> insert = new List<T2>(Cache.Values);
+                List<T2> insert = new List<T2>(cache.Values);
                 List<T2> remove = new List<T2>(currentStore);
                 foreach(T2 current in currentStore)
                 {
@@ -112,25 +118,26 @@ namespace AnimDataManager.AutoLoader
                         remove.Remove(current);
                     }
                 }
-                dao.Delete(remove.ToArray());
-                dao.Insert(insert.ToArray());
-                return;
+                bool result = true;
+                result &= DaoAction(dao.Delete, remove.ToArray());
+                result &= DaoAction(dao.Insert, insert.ToArray());
+                return result;
             } else {
 
                 ConcurrentDictionary<string, T2> currentStore = ToDictionaryDtos(dao.FindAll());
                 var remove = new List<T2>(currentStore.Values);
                 var update = new List<T2>();
                 var inserts = new List<T2>();
-                foreach (string keys in Cache.Keys)
+                foreach (string keys in cache.Keys)
                 {
                     if (!currentStore.ContainsKey(keys))
                     {
-                        inserts.Add(Cache[keys]);
+                        inserts.Add(cache[keys]);
                         continue;
                     }
-                    if (!Cache[keys].EqualField(currentStore[keys], others.ToArray()))
+                    if (!cache[keys].EqualField(currentStore[keys], others.ToArray()))
                     {
-                        update.Add(Cache[keys]);
+                        update.Add(cache[keys]);
                         remove.Remove(currentStore[keys]);
                         continue;
                     }
@@ -139,9 +146,11 @@ namespace AnimDataManager.AutoLoader
                         remove.Remove(currentStore[keys]);
                     }
                 }
-                dao.Delete(remove.ToArray());
-                dao.Update(update.ToArray());
-                dao.Insert(inserts.ToArray());
+                bool result = true;
+                result &= DaoAction(dao.Delete, remove.ToArray());
+                result &= DaoAction(dao.Update, update.ToArray());
+                result &= DaoAction(dao.Insert, inserts.ToArray());
+                return result;
             }
         }
 
