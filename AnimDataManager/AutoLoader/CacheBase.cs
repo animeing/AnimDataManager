@@ -1,8 +1,13 @@
 ﻿using AnimDataManager.DataBase;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text;
 
 namespace AnimDataManager.AutoLoader
 {
-    abstract class CacheBase
+    public abstract class CacheBase
     {
         protected abstract string CreateKey <T>(T data) where T : DtoBase<T>, IDtoBase, new();
         public abstract void Clear();
