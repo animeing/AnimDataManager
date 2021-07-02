@@ -14,8 +14,8 @@ namespace AnimDataManager.AutoLoader
 
         internal ConcurrentDictionary<string, T2> cache  = new ConcurrentDictionary<string, T2>();
         private T1 dao = new T1();
-        private List<PropertyInfo> uniques = new List<PropertyInfo>();
-        private List<PropertyInfo> others = new List<PropertyInfo>();
+        private readonly static List<PropertyInfo> uniques = new List<PropertyInfo>();
+        private readonly static List<PropertyInfo> others = new List<PropertyInfo>();
 
         public DataCache()
         {
