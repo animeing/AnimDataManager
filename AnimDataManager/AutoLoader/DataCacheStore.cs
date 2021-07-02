@@ -12,6 +12,18 @@ namespace AnimDataManager.AutoLoader
         public static DataCacheStore Instance { get; } = new DataCacheStore();
         private ConcurrentDictionary<Type, CacheBase> cacheData = new ConcurrentDictionary<Type, CacheBase>();
 
+        public bool IsRegisted<T1, T2>()
+        where T1 : DaoBase<T2>, new()
+        where T2 : DtoBase<T2>, new()
+        {
+            return IsRegisted(typeof(T1));
+        }
+
+        public bool IsRegisted(Type type)
+        {
+            return cacheData.ContainsKey(type);
+        }
+
         public bool Regist<T1, T2>()
         where T1 : DaoBase<T2>, new()
         where T2 : DtoBase<T2>, new()
