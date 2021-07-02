@@ -64,6 +64,21 @@ namespace AnimDataManager.AutoLoader
             return keys;
         }
 
+        /// <summary>
+        /// Uniqueの値からcacheのデータを取得します。
+        /// </summary>
+        /// <returns>cacheに値が存在した場合true</returns>
+        public bool Find(ref T2 param)
+        {
+            string key = CreateKey<T2>(param.Clone());
+            if (!cache.ContainsKey(key))
+            {
+                return false;
+            }
+            param = cache[key];
+            return true;
+        }
+
         public bool Add(T2 data)
         {
             string keys = CreateKey(data);

@@ -69,7 +69,7 @@ namespace AnimDataManager.DataBase
             }
         }
 
-        protected T Clone()
+        public T Clone()
         {
             var copy = new T();
             foreach (PropertyInfo fieldInfo in typeof(T).GetProperties())
