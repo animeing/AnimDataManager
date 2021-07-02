@@ -7,7 +7,7 @@ using System.Text;
 
 namespace AnimDataManager.AutoLoader
 {
-    public abstract class CacheWrapperBase
+    public abstract class CacheBase
     {
         protected abstract string CreateKey <T>(T data) where T : DtoBase<T>, IDtoBase, new();
         public abstract void Clear();
