@@ -70,7 +70,7 @@ namespace AnimDataManager.AutoLoader
         /// <returns>cacheに値が存在した場合true</returns>
         public bool Find(ref T2 param)
         {
-            string key = CreateKey<T2>(param.Clone());
+            string key = CreateKey(param.Clone());
             if (!cache.ContainsKey(key))
             {
                 return false;
