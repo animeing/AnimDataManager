@@ -2,7 +2,7 @@
 
 namespace AnimDataManager.AutoLoader
 {
-    internal abstract class CacheBase
+    abstract class CacheBase
     {
         protected abstract string CreateKey <T>(T data) where T : DtoBase<T>, IDtoBase, new();
         public abstract void Clear();
