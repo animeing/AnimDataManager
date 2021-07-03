@@ -3,7 +3,7 @@
 namespace AnimDataManager.Annotaition
 {
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = false)]
-    class Table : Attribute
+    public class Table : Attribute
     {
         public string name {
             get;
