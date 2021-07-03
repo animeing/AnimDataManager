@@ -54,6 +54,11 @@ namespace AnimDataManager.AutoLoader
         }
 
 
+        public ICollection<T2> GetCache()
+        {
+            return cache.Values;
+        }
+
         protected override string CreateKey<T>(T data)
         {
             var keys = "";
