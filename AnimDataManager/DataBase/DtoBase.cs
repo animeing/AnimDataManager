@@ -47,6 +47,9 @@ namespace AnimDataManager.DataBase
                     case DataType.Decimal:
                         fieldInfo.SetValue(this, info.GetValue(column.name, typeof(decimal)));
                         continue;
+                    case DataType.Delegate:
+                        fieldInfo.SetValue(this, info.GetValue(column.name, typeof(Delegate)));
+                        continue;
                     case DataType.Double:
                         fieldInfo.SetValue(this, info.GetValue(column.name, typeof(double)));
                         continue;
@@ -123,6 +126,9 @@ namespace AnimDataManager.DataBase
                         continue;
                     case DataType.Decimal:
                         info.AddValue(column.name, fieldInfo.GetValue(this), typeof(decimal));
+                        continue;
+                    case DataType.Delegate:
+                        info.AddValue(column.name, fieldInfo.GetValue(this), typeof(Delegate));
                         continue;
                     case DataType.Double:
                         info.AddValue(column.name, fieldInfo.GetValue(this), typeof(double));

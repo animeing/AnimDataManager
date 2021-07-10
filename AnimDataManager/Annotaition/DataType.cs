@@ -12,5 +12,6 @@
         Boolean,
         Float,
         Double,
+        Delegate
     }
 }
