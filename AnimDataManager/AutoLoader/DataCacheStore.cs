@@ -73,6 +73,10 @@ namespace AnimDataManager.AutoLoader
         {
             var allCount = Instance.cacheData.Count;
             var currentLoadCount = 0;
+            if(allCount == 0)
+            {
+                yield return 1f;
+            }
 
             foreach (CacheBase dataCacheWrapper in Instance.cacheData.Values)
             {
@@ -86,6 +90,10 @@ namespace AnimDataManager.AutoLoader
         {
             var allCount = Instance.cacheData.Count;
             var currentWiteCount = 0;
+            if(allCount == 0)
+            {
+                yield return 1f;
+            }
             foreach (CacheBase dataCacheWrapper in Instance.cacheData.Values)
             {
                 dataCacheWrapper.Write();
