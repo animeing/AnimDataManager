@@ -49,7 +49,7 @@ namespace AnimDataManager.AutoLoader
             return cacheData.TryRemove(daoKey, out cacheWrapperBase);
         }
 
-        public DataCache<T1, T2> GetDataCacheWrapper<T1, T2>()
+        public DataCache<T1, T2> GetDataCache<T1, T2>()
         where T1 : DaoBase<T2>, new()
         where T2 : DtoBase<T2>, new()
         {
