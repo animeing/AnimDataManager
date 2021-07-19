@@ -69,37 +69,31 @@ namespace AnimDataManager.AutoLoader
             }
         }
 
-        public IEnumerator<float> ReadAllRegistoryData()
+        private IEnumerator<float> RegistoryAction(Action<CacheBase> action)
         {
             var allCount = Instance.cacheData.Count;
             var currentLoadCount = 0;
-            if(allCount == 0)
+            if (allCount == 0)
             {
                 yield return 1f;
             }
 
             foreach (CacheBase dataCacheWrapper in Instance.cacheData.Values)
             {
-                dataCacheWrapper.Load();
+                action(dataCacheWrapper);
                 currentLoadCount++;
                 yield return currentLoadCount / allCount;
             }
         }
 
+        public IEnumerator<float> ReadAllRegistoryData()
+        {
+            return RegistoryAction(cache =>cache.Load());
+        }
+
         public IEnumerator<float> WriteAllRegistoryData()
         {
-            var allCount = Instance.cacheData.Count;
-            var currentWiteCount = 0;
-            if(allCount == 0)
-            {
-                yield return 1f;
-            }
-            foreach (CacheBase dataCacheWrapper in Instance.cacheData.Values)
-            {
-                dataCacheWrapper.Write();
-                currentWiteCount++;
-                yield return currentWiteCount / allCount;
-            }
+            return RegistoryAction(cache =>cache.Write());
         }
     }
 }

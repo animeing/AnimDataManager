@@ -89,7 +89,8 @@ namespace AnimDataManager.AutoLoader
             string keys = CreateKey(data);
             if (cache.ContainsKey(keys))
             {
-                return cache.TryUpdate(keys, data, cache[keys]);
+                cache[keys] = data;
+                return true;
             }
             else
             {
