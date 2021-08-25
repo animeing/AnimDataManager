@@ -143,7 +143,9 @@ namespace AnimDataManager.AutoLoader
                 result &= DaoAction(dao.Delete, remove.ToArray());
                 result &= DaoAction(dao.Insert, insert.ToArray());
                 return result;
-            } else {
+            }
+            else
+            {
 
                 ConcurrentDictionary<string, T2> currentStore = ToDictionaryDtos(dao.FindAll());
                 var remove = new List<T2>(currentStore.Values);
