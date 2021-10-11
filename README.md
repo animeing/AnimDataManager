@@ -4,6 +4,7 @@
 ## 使い方例
 ### DAO
 ```C#
+  //Streamを用いない場合はDaoBaseを拡張することで実装が可能です。
   public class ItemDao : StreamSaveDaoBase<ItemDto>
   {
 #if UNITY_STANDALONE
