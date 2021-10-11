@@ -95,6 +95,7 @@ public class Load
         }
         //Itemのcache取得
         var dataCache = manager.GetDataCache<ItemDao, ItemDto>();
+        //Itemの情報をDaoを通してcacheに取り込みます。
         dataCache.Load();
     }
 }
