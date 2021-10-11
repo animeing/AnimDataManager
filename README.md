@@ -59,18 +59,23 @@ public class Save
 {
     public Save()
     {
-        DataCache<ItemDao, ItemDto> manager = DataCache<ItemDao, ItemDto>.Instance;
-        //ItemDto、ItemDaoをCacheの管理下に登録
-        manager.Regist();
+        DataCacheStore manager = DataCacheStore.Instance;
+        //CacheStoreの管理下に定義があるか確認
+        if(!manager.IsRegisted<ItemDao, ItemDto>())
+        {
+            //CacheStoreの管理下に定義を登録
+            manager.Regist<ItemDao, ItemDto>();
+        }
         //cacheに入れるDtoの作成
         ItemDto itemDto = new ItemDto();
         itemDto.Count = 99;
         itemDto.Name = "Item";
-        //cacheに追加
-        manager.Add(itemDto);
-        //cacheを外部に保存
-        IEnumrator<float> write = manager.WriteAllRegistoryData();
-        while(write.MoveNext()){}
+        //Itemのcache取得
+        var dataCache = manager.GetDataCache<ItemDao, ItemDto>();
+        //Itemのcacheに追加
+        dataCache.Add(itemDto);
+        //Itemの情報をDaoを使って保存
+        dataCache.Write();
     }
 }
 ```
@@ -81,12 +86,16 @@ public class Load
 {
     public Load()
     {
-        DataCache<ItemDao, ItemDto> manager = DataCache<ItemDao, ItemDto>.Instance;
-        //ItemDto、ItemDaoをCacheの管理下に登録
-        manager.Regist();
-        //外部に保存されたデータを読み込み
-        IEnumrator<float> load = manager.ReadAllRegistoryData();
-        while(load.MoveNext()){}
+        DataCacheStore manager = DataCacheStore.Instance;
+        //CacheStoreの管理下に定義があるか確認
+        if(!manager.IsRegisted<ItemDao, ItemDto>())
+        {
+            //CacheStoreの管理下に定義を登録
+            manager.Regist<ItemDao, ItemDto>();
+        }
+        //Itemのcache取得
+        var dataCache = manager.GetDataCache<ItemDao, ItemDto>();
+        dataCache.Load();
     }
 }
 ```
