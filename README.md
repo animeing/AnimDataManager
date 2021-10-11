@@ -57,7 +57,7 @@
 ```C#
 public class Save
 {
-    public Save()
+    public void Save()
     {
         DataCacheStore manager = DataCacheStore.Instance;
         //CacheStoreの管理下に定義があるか確認
@@ -77,6 +77,13 @@ public class Save
         //Itemの情報をDaoを使って保存
         dataCache.Write();
     }
+    
+    //登録したデータをすべてセーブする場合(すべてのDAO, DTOがCacheに定義済みの場合に使うことを想定しています。)
+    public IEnumerator<float> SaveAll()
+    {
+        DataCacheStore manager = DataCacheStore.Instance;
+        return manager.WriteAllRegistoryData();
+    }
 }
 ```
 
@@ -84,7 +91,7 @@ public class Save
 ```C#
 public class Load
 {
-    public Load()
+    public void Load()
     {
         DataCacheStore manager = DataCacheStore.Instance;
         //CacheStoreの管理下に定義があるか確認
@@ -97,6 +104,12 @@ public class Load
         var dataCache = manager.GetDataCache<ItemDao, ItemDto>();
         //Itemの情報をDaoを通してcacheに取り込みます。
         dataCache.Load();
+    }
+    //以前に登録したデータをすべてロードする場合(すべてのDAO, DTOがCacheに定義済みの場合に使うことを想定しています。)
+    public IEnumerator<float> LoadAll()
+    {
+        DataCacheStore manager = DataCacheStore.Instance;
+        return manager.ReadAllRegistoryData();
     }
 }
 ```
