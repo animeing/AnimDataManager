@@ -4,6 +4,7 @@
 ## 使い方例
 ### DAO
 ```C#
+  //Streamを用いない場合はDaoBaseを拡張することで実装が可能です。
   public class ItemDao : StreamSaveDaoBase<ItemDto>
   {
 #if UNITY_STANDALONE
@@ -57,20 +58,32 @@
 ```C#
 public class Save
 {
-    public Save()
+    public void Save()
     {
-        DataCache<ItemDao, ItemDto> manager = DataCache<ItemDao, ItemDto>.Instance;
-        //ItemDto、ItemDaoをCacheの管理下に登録
-        manager.Regist();
+        DataCacheStore manager = DataCacheStore.Instance;
+        //CacheStoreの管理下に定義があるか確認
+        if(!manager.IsRegisted<ItemDao, ItemDto>())
+        {
+            //CacheStoreの管理下に定義を登録
+            manager.Regist<ItemDao, ItemDto>();
+        }
         //cacheに入れるDtoの作成
         ItemDto itemDto = new ItemDto();
         itemDto.Count = 99;
         itemDto.Name = "Item";
-        //cacheに追加
-        manager.Add(itemDto);
-        //cacheを外部に保存
-        IEnumrator<float> write = manager.WriteAllRegistoryData();
-        while(write.MoveNext()){}
+        //Itemのcache取得
+        var dataCache = manager.GetDataCache<ItemDao, ItemDto>();
+        //Itemのcacheに追加
+        dataCache.Add(itemDto);
+        //Itemの情報をDaoを使って保存
+        dataCache.Write();
+    }
+    
+    //登録したデータをすべてセーブする場合(すべてのDAO, DTOがCacheに定義済みの場合に使うことを想定しています。)
+    public IEnumerator<float> SaveAll()
+    {
+        DataCacheStore manager = DataCacheStore.Instance;
+        return manager.WriteAllRegistoryData();
     }
 }
 ```
@@ -79,14 +92,25 @@ public class Save
 ```C#
 public class Load
 {
-    public Load()
+    public void Load()
     {
-        DataCache<ItemDao, ItemDto> manager = DataCache<ItemDao, ItemDto>.Instance;
-        //ItemDto、ItemDaoをCacheの管理下に登録
-        manager.Regist();
-        //外部に保存されたデータを読み込み
-        IEnumrator<float> load = manager.ReadAllRegistoryData();
-        while(load.MoveNext()){}
+        DataCacheStore manager = DataCacheStore.Instance;
+        //CacheStoreの管理下に定義があるか確認
+        if(!manager.IsRegisted<ItemDao, ItemDto>())
+        {
+            //CacheStoreの管理下に定義を登録
+            manager.Regist<ItemDao, ItemDto>();
+        }
+        //Itemのcache取得
+        var dataCache = manager.GetDataCache<ItemDao, ItemDto>();
+        //Itemの情報をDaoを通してcacheに取り込みます。
+        dataCache.Load();
+    }
+    //以前に登録したデータをすべてロードする場合(すべてのDAO, DTOがCacheに定義済みの場合に使うことを想定しています。)
+    public IEnumerator<float> LoadAll()
+    {
+        DataCacheStore manager = DataCacheStore.Instance;
+        return manager.ReadAllRegistoryData();
     }
 }
 ```
