@@ -22,13 +22,12 @@ namespace AnimDataManager.DataBase
 
         private static readonly object lockObject = new object();
 
-        protected bool ExclusiveLockAction(Action action)
+        protected void ExclusiveLockAction(Action action)
         {
             lock(lockObject)
             {
                 action();
             }
-            return true;
         }
 
         public abstract List<T> FindAll();
