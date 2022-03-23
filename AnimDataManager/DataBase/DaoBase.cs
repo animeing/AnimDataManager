@@ -20,16 +20,6 @@ namespace AnimDataManager.DataBase
             }
         }
 
-        private static readonly object lockObject = new object();
-
-        protected void ExclusiveLockAction(Action action)
-        {
-            lock(lockObject)
-            {
-                action();
-            }
-        }
-
         public abstract List<T> FindAll();
         public abstract bool Update(T[] data);
         public abstract bool Delete(T[] data);

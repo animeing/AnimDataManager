@@ -4,7 +4,8 @@ using System.Text;
 
 namespace AnimDataManager.DataBase
 {
-    interface IResourcesAccess<T>
+    public interface IResourcesAccess<T>
     {
+        void Action(Action<T> action);
     }
 }
