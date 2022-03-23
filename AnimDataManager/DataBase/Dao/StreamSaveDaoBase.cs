@@ -1,8 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using AnimDataManager.DataBase.Dto;
+using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 
-namespace AnimDataManager.DataBase
+namespace AnimDataManager.DataBase.Dao
 {
     public class StreamSaveDaoBase<T> : DaoBase<T>
         where T : DtoBase<T>, new()

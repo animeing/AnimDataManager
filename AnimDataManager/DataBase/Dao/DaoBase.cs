@@ -1,8 +1,9 @@
 ﻿using AnimDataManager.Annotaition;
+using AnimDataManager.DataBase.Dto;
 using System;
 using System.Collections.Generic;
 
-namespace AnimDataManager.DataBase
+namespace AnimDataManager.DataBase.Dao
 {
     public abstract class DaoBase<T> : IDao<T>
         where T : DtoBase<T>, new()

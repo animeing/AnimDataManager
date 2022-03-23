@@ -1,6 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using AnimDataManager.DataBase.Dto;
+using System.Collections.Generic;
 
-namespace AnimDataManager.DataBase
+namespace AnimDataManager.DataBase.Dao
 {
     public interface IDao<T>
         where T : DtoBase<T>, new()

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace AnimDataManager.DataBase
+namespace AnimDataManager.DataBase.Resource
 {
     public interface IResourcesAccess<T>
     {

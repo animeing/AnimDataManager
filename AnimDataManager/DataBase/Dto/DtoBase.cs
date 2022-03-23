@@ -3,7 +3,7 @@ using System;
 using System.Reflection;
 using System.Runtime.Serialization;
 
-namespace AnimDataManager.DataBase
+namespace AnimDataManager.DataBase.Dto
 {
     [Serializable]
     public abstract class DtoBase<T> : ISerializable, IDtoBase

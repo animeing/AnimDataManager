@@ -1,4 +1,6 @@
 ﻿using AnimDataManager.DataBase;
+using AnimDataManager.DataBase.Dao;
+using AnimDataManager.DataBase.Dto;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
