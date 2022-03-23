@@ -4,12 +4,12 @@ using System.Text;
 
 namespace AnimDataManager.DataBase.Resource
 {
-    public abstract class ResourceExclusiveLockBase<R> : IResourcesAccess<R>
+    public class ExclusiveLockResource<R> : IResourcesAccess<R>
     {
         private readonly object lockObject = new object();
         private R resource;
 
-        public ResourceExclusiveLockBase(R resource)
+        public ExclusiveLockResource(R resource)
         {
             this.resource = resource;
         }
