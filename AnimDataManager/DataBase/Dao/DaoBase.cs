@@ -21,6 +21,21 @@ namespace AnimDataManager.DataBase.Dao
             }
         }
 
+        public bool Update(List<T> data)
+        {
+            return Update(data.ToArray());
+        }
+
+        public bool Delete(List<T> data)
+        {
+            return Delete(data.ToArray());
+        }
+
+        public bool Insert(List<T> data)
+        {
+            return Insert(data.ToArray());
+        }
+
         public abstract List<T> FindAll();
         public abstract bool Update(T[] data);
         public abstract bool Delete(T[] data);
