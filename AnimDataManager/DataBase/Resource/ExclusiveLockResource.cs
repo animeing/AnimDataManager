@@ -6,8 +6,8 @@ namespace AnimDataManager.DataBase.Resource
 {
     public class ExclusiveLockResource<R> : IResourcesAccess<R>
     {
-        private readonly object lockObject = new object();
-        private R resource;
+        protected readonly object lockObject = new object();
+        protected R resource;
 
         public ExclusiveLockResource(R resource)
         {
