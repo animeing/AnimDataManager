@@ -1,19 +1,20 @@
 ﻿using AnimDataManager.DataBase.Dto;
+using AnimDataManager.DataBase.Resource;
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 
 namespace AnimDataManager.DataBase.Dao
 {
-    public class StreamSaveDaoBase<T> : DaoBase<T>
+    public class FileStreamSaveDaoBase<T> : DaoBase<T>
         where T : DtoBase<T>, new()
     {
-        public delegate Stream CreateStream(FileMode fileMode);
-        private CreateStream createStream;
 
-        public StreamSaveDaoBase(CreateStream createStream)
+        private FileResource streamRerouce;
+
+        public FileStreamSaveDaoBase(string saveFilePath)
         {
-            this.createStream = createStream;
+            streamRerouce = new FileResource(saveFilePath);
         }
 
         public override bool Delete(T[] data)
@@ -26,31 +27,36 @@ namespace AnimDataManager.DataBase.Dao
                     currnetSaveData.Remove(remove);
                 }
             }
-            using (Stream stream = createStream(FileMode.OpenOrCreate))
-            {
-                if(stream.Length > 0)
+            streamRerouce.Action(createStream=> {
+                using (Stream stream = createStream(FileMode.OpenOrCreate))
                 {
-                    var formatter = new BinaryFormatter();
-                    formatter.Serialize(stream, currnetSaveData);
+                    if (stream.Length > 0)
+                    {
+                        var formatter = new BinaryFormatter();
+                        formatter.Serialize(stream, currnetSaveData);
+                    }
                 }
-            }
+            });
             return true;
         }
 
         public override List<T> FindAll()
         {
-            using (Stream stream = createStream(FileMode.OpenOrCreate))
+            return streamRerouce.Action(createStream =>
             {
-                if(stream.Length > 0)
+                using (Stream stream = createStream(FileMode.OpenOrCreate))
                 {
-                    var formatter = new BinaryFormatter();
-                    return (List<T>)formatter.Deserialize(stream);
-                } 
-                else
-                {
-                    return new List<T>();
+                    if (stream.Length > 0)
+                    {
+                        var formatter = new BinaryFormatter();
+                        return (List<T>)formatter.Deserialize(stream);
+                    }
+                    else
+                    {
+                        return new List<T>();
+                    }
                 }
-            }
+            });
         }
 
         public override bool Insert(T[] data)
@@ -60,12 +66,15 @@ namespace AnimDataManager.DataBase.Dao
             {
                 currentSaveData.Add(insertData);
             }
-            using (Stream stream = createStream(FileMode.OpenOrCreate))
+            return streamRerouce.Action(createStream =>
             {
-                var formatter = new BinaryFormatter();
-                formatter.Serialize(stream, currentSaveData);
-            }
-            return true;
+                using (Stream stream = createStream(FileMode.OpenOrCreate))
+                {
+                    var formatter = new BinaryFormatter();
+                    formatter.Serialize(stream, currentSaveData);
+                }
+                return true;
+            });
         }
 
         public override bool Update(T[] data)
@@ -77,12 +86,15 @@ namespace AnimDataManager.DataBase.Dao
                 currentSaveData.Remove(find);
                 currentSaveData.Add(update);
             }
-            using (Stream stream = createStream(FileMode.OpenOrCreate))
+            return streamRerouce.Action(createStream =>
             {
-                var formatter = new BinaryFormatter();
-                formatter.Serialize(stream, currentSaveData);
-            }
-            return true;
+                using (Stream stream = createStream(FileMode.OpenOrCreate))
+                {
+                    var formatter = new BinaryFormatter();
+                    formatter.Serialize(stream, currentSaveData);
+                }
+                return true;
+            });
         }
     }
 }
