@@ -22,5 +22,13 @@ namespace AnimDataManager.DataBase.Resource
             }
         }
 
+        public RT Action<RT>(Func<R, RT> action)
+        {
+            lock(lockObject)
+            {
+                return action(resource);
+            }
+        }
+
     }
 }
