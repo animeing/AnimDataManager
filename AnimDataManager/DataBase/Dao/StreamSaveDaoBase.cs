@@ -20,14 +20,16 @@ namespace AnimDataManager.DataBase.Dao
         public override bool Delete(T[] data)
         {
             List<T> currnetSaveData = FindAll();
-            foreach (T deleteData in data) {
+            foreach (T deleteData in data)
+            {
                 T remove = currnetSaveData.Find(searchData => searchData.IsMatchKey(deleteData));
                 if(remove != null)
                 {
                     currnetSaveData.Remove(remove);
                 }
             }
-            streamRerouce.Action(createStream=> {
+            streamRerouce.Action(createStream => 
+            {
                 using (Stream stream = createStream(FileMode.OpenOrCreate))
                 {
                     if (stream.Length > 0)
